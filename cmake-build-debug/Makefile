@@ -48,10 +48,10 @@ RM = /Users/jorgeperez/Downloads/CLion.app/Contents/bin/cmake/mac/bin/cmake -E r
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/jorgeperez/Desktop/Spring_2020/OS-4348/Project2
+CMAKE_SOURCE_DIR = /Users/jorgeperez/Desktop/MyProjects/os4348-P2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/jorgeperez/Desktop/Spring_2020/OS-4348/Project2/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/jorgeperez/Desktop/MyProjects/os4348-P2/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jorgeperez/Desktop/Spring_2020/OS-4348/Project2/cmake-build-debug/CMakeFiles /Users/jorgeperez/Desktop/Spring_2020/OS-4348/Project2/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jorgeperez/Desktop/MyProjects/os4348-P2/cmake-build-debug/CMakeFiles /Users/jorgeperez/Desktop/MyProjects/os4348-P2/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jorgeperez/Desktop/Spring_2020/OS-4348/Project2/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jorgeperez/Desktop/MyProjects/os4348-P2/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Project2
+# Target rules for targets named os4348-P2
 
 # Build rule for target.
-Project2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Project2
-.PHONY : Project2
+os4348-P2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 os4348-P2
+.PHONY : os4348-P2
 
 # fast build rule for target.
-Project2/fast:
-	$(MAKE) -f CMakeFiles/Project2.dir/build.make CMakeFiles/Project2.dir/build
-.PHONY : Project2/fast
+os4348-P2/fast:
+	$(MAKE) -f CMakeFiles/os4348-P2.dir/build.make CMakeFiles/os4348-P2.dir/build
+.PHONY : os4348-P2/fast
 
 main.o: main.c.o
 
@@ -129,7 +129,7 @@ main.o: main.c.o
 
 # target to build an object file
 main.c.o:
-	$(MAKE) -f CMakeFiles/Project2.dir/build.make CMakeFiles/Project2.dir/main.c.o
+	$(MAKE) -f CMakeFiles/os4348-P2.dir/build.make CMakeFiles/os4348-P2.dir/main.c.o
 .PHONY : main.c.o
 
 main.i: main.c.i
@@ -138,7 +138,7 @@ main.i: main.c.i
 
 # target to preprocess a source file
 main.c.i:
-	$(MAKE) -f CMakeFiles/Project2.dir/build.make CMakeFiles/Project2.dir/main.c.i
+	$(MAKE) -f CMakeFiles/os4348-P2.dir/build.make CMakeFiles/os4348-P2.dir/main.c.i
 .PHONY : main.c.i
 
 main.s: main.c.s
@@ -147,7 +147,7 @@ main.s: main.c.s
 
 # target to generate assembly for a file
 main.c.s:
-	$(MAKE) -f CMakeFiles/Project2.dir/build.make CMakeFiles/Project2.dir/main.c.s
+	$(MAKE) -f CMakeFiles/os4348-P2.dir/build.make CMakeFiles/os4348-P2.dir/main.c.s
 .PHONY : main.c.s
 
 # Help Target
@@ -158,7 +158,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... Project2"
+	@echo "... os4348-P2"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
