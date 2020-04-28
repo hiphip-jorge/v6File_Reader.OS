@@ -11,11 +11,11 @@ int main(int argc, char** argv){
         exit(1);
     }
 
-    inode = readInInode(2*BLOCK_SIZE,fd);
+//    inode = readInInode(2*BLOCK_SIZE,fd);
     sBlock = readInSuperBlock(fd);
 
     printSuperBlock(*sBlock);
-    printInode(*inode);
+//    printInode(*inode);
     close(fd);
     return 0;
 }
