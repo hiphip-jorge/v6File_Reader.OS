@@ -1,0 +1,1 @@
+/usr/bin/cc -g  -Wl,--enable-auto-import CMakeFiles/os4348-P2.dir/main.c.o  -o os4348-P2.exe -Wl,--out-implib,libos4348-P2.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

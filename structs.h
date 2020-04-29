@@ -69,6 +69,7 @@ void printSuperBlock(superblock_type superBlock){
     printf("fsize: %i\n", superBlock.fsize);
     printf("nfree: %hi\n", superBlock.nfree);
     printf("ninode: %i\n", superBlock.ninode);
+
     printf("free number 1 is %i\n",superBlock.free[0]);
     printf("inode number 1 is %hi\n",superBlock.inode[0]);
     printf("flock: %c\n", superBlock.flock);

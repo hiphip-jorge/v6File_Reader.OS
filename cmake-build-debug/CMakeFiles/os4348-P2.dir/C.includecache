@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/main.c
+structs.h
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/structs.h
+
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/structs.h
+stdio.h
+-
+fcntl.h
+-
+stdlib.h
+-
+unistd.h
+-
+
