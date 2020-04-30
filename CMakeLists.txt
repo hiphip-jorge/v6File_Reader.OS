@@ -4,5 +4,5 @@ project(os4348-P2 C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(os4348-P2 main.c structs.h v6fs fsFunctions.c fsFunctions.h)
+add_executable(os4348-P2 main.c v6fs fsFunctions.c fsFunctions.h)
 
