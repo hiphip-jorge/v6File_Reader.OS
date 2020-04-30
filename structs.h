@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+
 // Useful Numbers
 #define NUM_OF_BLOCKS 256   // Number of blocks in block
 #define BLOCK_SIZE 1024     // Block size
@@ -36,7 +37,6 @@
 #define MODTIME_OFFSET 60
 
 // Superblock Structure
-#pragma pack(1)
 typedef struct {
     unsigned short isize; // +0: 2 bytes - Blocks for i-list
     unsigned int fsize; // +2: 4 bytes - Number of blocks
@@ -51,7 +51,6 @@ typedef struct {
 } superblock_type;
 
 // I-Node Structure
-#pragma pack(1)
 typedef struct {
     unsigned short flags; // +0: Flag of a file - 2 bytes
     unsigned short nlinks; // +2: Number of links to a file - 2 bytes
@@ -63,28 +62,49 @@ typedef struct {
     unsigned short modtime[2]; // +60: Last modified time
 } inode_type;
 
+// print decimal to binary
+void printBits(size_t const size, void const * const ptr){
+    unsigned char *b = (unsigned char*) ptr;
+    unsigned char byte;
+    int i, j;
+
+    for (i=size-1;i>=0;i--)
+    {
+        for (j=7;j>=0;j--)
+        {
+            byte = (b[i] >> j) & 1;
+            printf("%u", byte);
+        }
+    }
+    puts("");
+}
+
 // print functions
 void printSuperBlock(superblock_type superBlock){
-    printf("isize: %hi\n", superBlock.isize);
-    printf("fsize: %i\n", superBlock.fsize);
-    printf("nfree: %hi\n", superBlock.nfree);
-    printf("ninode: %i\n", superBlock.ninode);
+    printf("Superblock:\n");
+    printf("isize: %u\n", superBlock.isize);
+    printf("fsize: %u\n", superBlock.fsize);
+    printf("nfree: %u\n", superBlock.nfree);
+    printf("ninode: %u\n", superBlock.ninode);
 
-    printf("free number 1 is %i\n",superBlock.free[0]);
-    printf("inode number 1 is %hi\n",superBlock.inode[0]);
+    printf("free number 1 is %u\n",superBlock.free[0]);
+    printf("inode number 1 is %u\n",superBlock.inode[0]);
     printf("flock: %c\n", superBlock.flock);
     printf("ilock: %c\n", superBlock.ilock);
-    printf("fmod: %hi\n", superBlock.fmod);
+    printf("fmod: %u\n", superBlock.fmod);
     printf("time number 1 is %hi\n\n",superBlock.time[0]);
 }
 void printInode(inode_type inode){
-    printf("flag: %hi\n", inode.flags);
-    printf("size: %i\n\n", inode.size);
-    /*
-    printf("addr number 1 is ", inode.addr[0]);
-    printf("actime number 1 is ", inode.actime[0]);
-    printf("modtime number 1 is\n", inode.modtime[0]);
-     */
+    printf("I-Node:\n");
+    printf("flag: ");
+    printBits(sizeof(inode.flags),&inode.flags);
+    printf("nlinks: %u\n", inode.nlinks);
+    printf("uid: %u\n", inode.uid);
+    printf("gid: %u\n", inode.gid);
+    printf("size: %u\n", inode.size);
+    printf("addr[0]: %u\n", inode.addr[0]);
+//    printf("actime[0]: %u\n", inode.actime[0]);
+//    printf("modtime[0]: %u\n", inode.modtime[0]);
 }
 
 // read in functions
@@ -110,11 +130,11 @@ superblock_type *readInSuperBlock(int file){
 
     // offset to free
     lseek(file,BLOCK_SIZE+FREE_OFFSET,0);
-    read(file,&superBlock->free, sizeof(int));
+    read(file,&superBlock->free[0], sizeof(int));
 
     //offset to inode
     lseek(file,BLOCK_SIZE+INODE_OFFSET,0);
-    read(file,&superBlock->inode, sizeof(short));
+    read(file,&superBlock->inode[0], sizeof(short));
 
     // offset to flock
     lseek(file,BLOCK_SIZE+FLOCK_OFFSET,0);
@@ -130,7 +150,7 @@ superblock_type *readInSuperBlock(int file){
 
     // offset to time
     lseek(file,BLOCK_SIZE+TIME_OFFSET,0);
-    read(file,&superBlock->time, sizeof(short));
+    read(file,&superBlock->time[0], sizeof(short));
 
     /*
     // free offset already to inode
@@ -154,7 +174,6 @@ inode_type *readInInode(int offset, int file){
     lseek(file,offset,0);
     read(file,&inode->flags,sizeof(inode->flags));
 
-    /*
     // offset to nlinks
     lseek(file,offset+NLINKS_OFFSET,0);
     read(file,&inode->nlinks,sizeof(inode->nlinks));
@@ -166,23 +185,22 @@ inode_type *readInInode(int offset, int file){
     // offset to gid
     lseek(file,offset+GID_OFFSET,0);
     read(file,&inode->gid,sizeof(inode->gid));
-    */
+
     // offset to size
     lseek(file,offset+SIZE_OFFSET,0);
     read(file,&inode->size,sizeof(inode->size));
-    /*
+
     // offset to first addr
     lseek(file,offset+ADDR_OFFSET,0);
     read(file,&inode->addr,sizeof(int));
 
     // offset to first actime
-    lseek(file,offset+ACTIME_OFFSET,0);
-    read(file,&inode->actime,sizeof(short));
+//    lseek(file,offset+ACTIME_OFFSET,0);
+//    read(file,&inode->actime,sizeof(short));
 
     //offset to first modtime
-    lseek(file,offset+MODTIME_OFFSET,0);
-    read(file,&inode->modtime,sizeof(short));
-*/
+//    lseek(file,offset+MODTIME_OFFSET,0);
+//    read(file,&inode->modtime,sizeof(short));
 
     return inode;
 }

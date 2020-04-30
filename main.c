@@ -1,9 +1,10 @@
-#include "structs.h"
+#include "fsFunctions.h"
 
 int main(int argc, char** argv){
     int fd;
-    inode_type* inode;
-    superblock_type *sBlock;
+    superblock_type superblock;
+    inode_type inode;
+
 
     // open disk
     if((fd = open("../v6fs",2)) == -1){
@@ -11,11 +12,15 @@ int main(int argc, char** argv){
         exit(1);
     }
 
-//    inode = readInInode(2*BLOCK_SIZE,fd);
-    sBlock = readInSuperBlock(fd);
 
-    printSuperBlock(*sBlock);
-//    printInode(*inode);
+    readInSuperBlock(fd,&superblock);
+    readInInode(2*BLOCK_SIZE,fd,&inode);
+
+    printSuperBlock(superblock);
+    printf("\n");
+    printInode(inode);
+
+
     close(fd);
     return 0;
 }

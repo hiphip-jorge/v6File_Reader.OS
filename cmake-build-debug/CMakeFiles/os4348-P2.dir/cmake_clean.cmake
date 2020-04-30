@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/os4348-P2.dir/fsFunctions.c.o"
   "CMakeFiles/os4348-P2.dir/main.c.o"
-  "libos4348-P2.dll.a"
-  "os4348-P2.exe"
+  "os4348-P2"
   "os4348-P2.pdb"
 )
 
