@@ -94,6 +94,14 @@ read(file,&inode->addr,sizeof(int));
     lseek(file,offset+MODTIME_OFFSET,0);
     read(file,&inode->modtime,sizeof(short));
 }
+void readInDir(int offset, int file, dir_type* dir){
+    // offset to file inode
+    lseek(file,offset,0);
+    read(file,&dir->inode,sizeof(dir->inode));
+    // offset to filename
+    lseek(file,offset+2,0);
+    read(file,&dir->filename,sizeof(dir->filename));
+}
 ////////////////////////////////////////////////////////////////
 
 // Print Functions /////////////////////////////////////////
@@ -122,6 +130,10 @@ void printInode(inode_type inode){
     printf("addr[0]: %u\n", inode.addr[0]);
     printf("actime[0]: %u\n", inode.actime[0]);
     printf("modtime[0]: %u\n", inode.modtime[0]);
+}
+void printDir(dir_type dir){
+    printf("inode: %u\n",dir.inode);
+    printf("filename: %s\n",dir.filename);
 }
 ///////////////////////////////////////////////////////////
 
