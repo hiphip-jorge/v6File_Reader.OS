@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/Users/jorgeperez/Desktop/MyProjects/os4348-P2/fsFunctions.c
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/fsFunctions.c
 fsFunctions.h
-/Users/jorgeperez/Desktop/MyProjects/os4348-P2/fsFunctions.h
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/fsFunctions.h
 
-/Users/jorgeperez/Desktop/MyProjects/os4348-P2/fsFunctions.h
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/fsFunctions.h
 stdio.h
 -
 fcntl.h
@@ -19,8 +19,4 @@ stdlib.h
 -
 unistd.h
 -
-
-/Users/jorgeperez/Desktop/MyProjects/os4348-P2/main.c
-fsFunctions.h
-/Users/jorgeperez/Desktop/MyProjects/os4348-P2/fsFunctions.h
 

@@ -10,13 +10,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-
-// Useful Numbers
-#define NUM_OF_BLOCKS 256   // Number of blocks in block
+// Constants ////////////////////////////
 #define BLOCK_SIZE 1024     // Block size
-#define NUM_OF_INODES 16    // Number of i-nodes in block
-#define INODE_SIZE 64       // Size of i-nodes
-#define ADDR 11             // +11: block numbers or device numbers
 
 // Superblock offsets
 // isize starts at 0 offset
@@ -29,8 +24,9 @@
 #define ILOCK_OFFSET 1017
 #define FMOD_OFFSET 1018
 #define TIME_OFFSET 1020
+/////////////////////////////////////////
 
-// I-Node Offsets
+// I-Node Offsets //////////
 // flags start at 0 offset
 #define NLINKS_OFFSET 2
 #define UID_OFFSET 4
@@ -39,7 +35,9 @@
 #define ADDR_OFFSET 12
 #define ACTIME_OFFSET 56
 #define MODTIME_OFFSET 60
+///////////////////////////
 
+// Structs ///////////////
 // Superblock Structure
 typedef struct {
     unsigned short isize; // +0: 2 bytes - Blocks for i-list
@@ -66,15 +64,22 @@ typedef struct {
     unsigned short modtime[2]; // +60: Last modified time
 } inode_type;
 
+// Directory Type
+typedef struct {
+    unsigned short  inode;
+    char filename[14];
+} dir_type;
+////////////////////////////////////
+
+// Prototypes /////////////////////
 // print decimal to binary
 void printBits(size_t const size, void const * const ptr);
-
 // print functions
 void printSuperBlock(superblock_type superBlock);
 void printInode(inode_type inode);
-
 // read in functions
 void readInSuperBlock(int file, superblock_type* superBlock);
 void readInInode(int offset, int file, inode_type* inode);
+///////////////////////////////////
 
 #endif //OS4348_P2_FSFUNCTIONS_H

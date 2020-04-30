@@ -15,16 +15,15 @@ int main(int argc, char** argv){
 
     readInSuperBlock(fd,&superblock);
     readInInode(2*BLOCK_SIZE,fd,&inode);
+    lseek(fd,BLOCK_SIZE,0);
 
     printSuperBlock(superblock);
     printf("\n");
     printInode(inode);
+    printf("\n");
+
 
 
     close(fd);
     return 0;
 }
-
-// flag and isize are reading the same content, size is modified as a result.
-// depending which one is executed first, they alternate. See why they are linking
-// to the same address

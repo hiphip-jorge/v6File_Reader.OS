@@ -1,25 +1,9 @@
 //
 // Created by Jorge Perez on 4/29/20.
 //
-
 #include "fsFunctions.h"
 
-void printBits(size_t const size, void const * const ptr){
-        unsigned char *b = (unsigned char*) ptr;
-        unsigned char byte;
-        int i, j;
-
-        for (i=size-1;i>=0;i--)
-        {
-            for (j=7;j>=0;j--)
-            {
-                byte = (b[i] >> j) & 1;
-                printf("%u", byte);
-            }
-        }
-        puts("");
-}
-
+// Read in Functions ////////////////////////////////////////////
 void readInSuperBlock(int file, superblock_type* superBlock){
 
     // offset to the beginning of Super-Block
@@ -61,7 +45,7 @@ void readInSuperBlock(int file, superblock_type* superBlock){
 
     // offset to time
     lseek(file,BLOCK_SIZE+TIME_OFFSET,0);
-    read(file,&superBlock->time[0], sizeof(short));
+    read(file,superBlock->time, sizeof(short));
 
     /*
     // free offset already to inode
@@ -103,14 +87,16 @@ lseek(file,offset+ADDR_OFFSET,0);
 read(file,&inode->addr,sizeof(int));
 
 // offset to first actime
-//    lseek(file,offset+ACTIME_OFFSET,0);
-//    read(file,&inode->actime,sizeof(short));
+    lseek(file,offset+ACTIME_OFFSET,0);
+    read(file,&inode->actime,sizeof(short));
 
 //offset to first modtime
-//    lseek(file,offset+MODTIME_OFFSET,0);
-//    read(file,&inode->modtime,sizeof(short));
+    lseek(file,offset+MODTIME_OFFSET,0);
+    read(file,&inode->modtime,sizeof(short));
 }
+////////////////////////////////////////////////////////////////
 
+// Print Functions /////////////////////////////////////////
 void printSuperBlock(superblock_type superBlock){
     printf("Superblock:\n");
     printf("isize: %u\n", superBlock.isize);
@@ -118,12 +104,12 @@ void printSuperBlock(superblock_type superBlock){
     printf("nfree: %u\n", superBlock.nfree);
     printf("ninode: %u\n", superBlock.ninode);
 
-    printf("free number 1 is %u\n",superBlock.free[0]);
-    printf("inode number 1 is %u\n",superBlock.inode[0]);
+    printf("free[0]: %u\n",superBlock.free[0]);
+    printf("inode[0]: %u\n",superBlock.inode[0]);
     printf("flock: %c\n", superBlock.flock);
     printf("ilock: %c\n", superBlock.ilock);
     printf("fmod: %u\n", superBlock.fmod);
-    printf("time number 1 is %hi\n\n",superBlock.time[0]);
+    printf("time[0]: %u\n\n",superBlock.time[0]);
 }
 void printInode(inode_type inode){
     printf("I-Node:\n");
@@ -134,6 +120,25 @@ void printInode(inode_type inode){
     printf("gid: %u\n", inode.gid);
     printf("size: %u\n", inode.size);
     printf("addr[0]: %u\n", inode.addr[0]);
-//    printf("actime[0]: %u\n", inode.actime[0]);
-//    printf("modtime[0]: %u\n", inode.modtime[0]);
+    printf("actime[0]: %u\n", inode.actime[0]);
+    printf("modtime[0]: %u\n", inode.modtime[0]);
 }
+///////////////////////////////////////////////////////////
+
+// misc ///////////////////////////////////////////////////
+void printBits(size_t const size, void const * const ptr){
+    unsigned char *b = (unsigned char*) ptr;
+    unsigned char byte;
+    int i, j;
+
+    for (i=size-1;i>=0;i--)
+    {
+        for (j=7;j>=0;j--)
+        {
+            byte = (b[i] >> j) & 1;
+            printf("%u", byte);
+        }
+    }
+    puts("");
+}
+///////////////////////////////////////////////////////////
