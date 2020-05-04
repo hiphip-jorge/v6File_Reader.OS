@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/fsFunctions.c
+fsFunctions.h
+/cygdrive/c/Users/perez/CLionProjects/os4348-P2/fsFunctions.h
+
 /cygdrive/c/Users/perez/CLionProjects/os4348-P2/fsFunctions.h
 stdio.h
 -
@@ -17,8 +21,4 @@ unistd.h
 -
 string.h
 -
-
-/cygdrive/c/Users/perez/CLionProjects/os4348-P2/main.c
-fsFunctions.h
-/cygdrive/c/Users/perez/CLionProjects/os4348-P2/fsFunctions.h
 

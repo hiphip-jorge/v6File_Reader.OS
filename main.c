@@ -52,29 +52,30 @@ int main(int argc, char** argv){
     // check file type
     ft = fileType(&inode);
 
+    memset(dir,'\0',sizeof(dir));
     if (ft == 1){
-        printf("File is a directory\n");
+        printf("\nFile is a directory\n");
         pathElem = strtok(NULL,"/");
         printf(pathElem);
-        /*
-        while (pathElem != NULL){
-            // go to block
-            readInDir(BLOCK_SIZE*inode.addr[0], fd,dir,inode.size/DIR_SIZE);
-            printDir(dirInode, inode.size/DIR_SIZE);
 
-            // look for directory in block
-            printf(pathElem);
-            if ((dirInode = findElem(dir,pathElem))<0)
-                fprintf(stderr, "Cannot open %s. Try again later.\n",testPath);
+        //while (pathElem != NULL){
+        // go to block
+        readInDir(BLOCK_SIZE*inode.addr[0], fd,dir,inode.size/DIR_SIZE);
+        printDir(dir,inode.size/DIR_SIZE);
 
-            // go to file inode
-            readInInode(2*BLOCK_SIZE+(dirInode-1)*64,fd,&inode);
-            printInode(inode);
+        // look for directory in block
+        printf(pathElem);
+        if ((dirInode = findElem(dir,pathElem))<0)
+            fprintf(stderr, "Cannot open %s. Try again later.\n",testPath);
 
-            // get next element
-            strtok(NULL,"/");
+        // go to file inode
+        readInInode(2*BLOCK_SIZE+(dirInode-1)*64,fd,&inode);
+        printInode(inode);
 
-        }*/
+        // get next element
+        strtok(NULL,"/");
+
+        //}
     }else{
         printf("File is not a directory");
     }

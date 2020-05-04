@@ -161,11 +161,14 @@ void printDir(const dir_type* dir, int size){
 // misc ///////////////////////////////////////////////////
 // find path element in directory
 int findElem(const dir_type* dir, const char* elem){
-    for (int i = 0; i < sizeof(dir); i++) {
+    printf("\nEntered findElem\n");
+    printf("size of dir: %u",sizeof(dir));
+    //for (int i = 0; i < sizeof(dir); i++) {
         if (strcmp(dir[i].filename,elem) == 0){
             return i;
         }
     }
+    printf("Exited findElem\n");
     return -1;
 }
 
