@@ -123,7 +123,7 @@ void readInDir(int offset, int file, dir_type* dir, int size){
 ////////////////////////////////////////////////////////////////
 
 // Print Functions /////////////////////////////////////////
-void printSuperBlock(superblock_type superBlock){
+void printSuperBlock(const superblock_type superBlock){
     printf("Superblock:\n");
     printf("isize: %u\n", superBlock.isize);
     printf("fsize: %u\n", superBlock.fsize);
@@ -137,10 +137,9 @@ void printSuperBlock(superblock_type superBlock){
     printf("fmod: %u\n", superBlock.fmod);
     printf("time[0]: %u\n\n",superBlock.time[0]);
 }
-void printInode(inode_type inode){
+void printInode(const inode_type inode){
     printf("I-Node:\n");
-    printf("flag: ");
-    printBits(sizeof(inode.flags),&inode.flags);
+    printf("flag: %u\n",inode.flags);
     printf("nlinks: %u\n", inode.nlinks);
     printf("uid: %u\n", inode.uid);
     printf("gid: %u\n", inode.gid);
@@ -151,7 +150,7 @@ void printInode(inode_type inode){
 //    printf("actime[0]: %u\n", inode.actime[0]);
 //    printf("modtime[0]: %u\n", inode.modtime[0]);
 }
-void printDir(dir_type* dir, int size){
+void printDir(const dir_type* dir, int size){
     for (int i = 0; i < size; i++) {
         printf("inode [%i]: %u\n",i,dir[i].inode);
         printf("filename [%i]: %s\n",i,dir[i].filename);
@@ -160,19 +159,30 @@ void printDir(dir_type* dir, int size){
 ///////////////////////////////////////////////////////////
 
 // misc ///////////////////////////////////////////////////
-void printBits(size_t const size, void const * const ptr){
-    unsigned char *b = (unsigned char*) ptr;
-    unsigned char byte;
-    int i, j;
-
-    for (i=size-1;i>=0;i--)
-    {
-        for (j=7;j>=0;j--)
-        {
-            byte = (b[i] >> j) & 1;
-            printf("%u", byte);
+// find path element in directory
+int findElem(const dir_type* dir, const char* elem){
+    for (int i = 0; i < sizeof(dir); i++) {
+        if (strcmp(dir[i].filename,elem) == 0){
+            return i;
         }
     }
-    puts("");
+    return -1;
 }
+
+// determine type of file
+// 0 - plain file, 1 - directory
+// 2 - char-type, 3 - block-type
+int fileType(const inode_type* inode){
+    int type = 0;
+    if (inode->flags/40000 == 1)
+        type = 1;
+    if (inode->flags/20000 == 1)
+        type = 2;
+    if (inode->flags/60000 == 1)
+        type = 3;
+    printf("File type: %i\n",type);
+    return type;
+
+}
+
 ///////////////////////////////////////////////////////////

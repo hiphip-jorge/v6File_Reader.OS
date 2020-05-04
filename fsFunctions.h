@@ -75,16 +75,19 @@ typedef struct {
 ////////////////////////////////////
 
 // Prototypes /////////////////////
-// print decimal to binary
-void printBits(size_t const size, void const * const ptr);
+// find path element in directory
+int findElem(const dir_type* dir, const char* elem);
+// determine type of file
+int fileType(const inode_type* inode);
 // print functions
-void printSuperBlock(superblock_type superBlock);
-void printInode(inode_type inode);
-void printDir(dir_type* dir, int size);
+void printSuperBlock(const superblock_type superBlock);
+void printInode(const inode_type inode);
+void printDir(const dir_type* dir, int size);
 // read in functions
 void readInSuperBlock(int file, superblock_type* superBlock);
 void readInInode(int offset, int file, inode_type* inode);
 void readInDir(int offset, int file, dir_type* dir, int size);
 ///////////////////////////////////
+
 
 #endif //OS4348_P2_FSFUNCTIONS_H
