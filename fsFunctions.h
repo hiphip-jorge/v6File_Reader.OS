@@ -76,7 +76,7 @@ typedef struct {
 
 // Prototypes /////////////////////
 // find path element in directory
-int findElem(const dir_type* dir, const char* elem);
+int findElem(dir_type* dir, const char* elem, const int size);
 // determine type of file
 int fileType(const inode_type* inode);
 // print functions
