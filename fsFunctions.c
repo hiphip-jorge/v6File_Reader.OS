@@ -86,9 +86,11 @@ void readInInode(int offset, int file, inode_type* inode){
     //lseek(file,offset+ADDR_OFFSET,0);
     //read(file,&inode->addr,sizeof(int));
 
-    for (int i = 0; i < (inode->size/BLOCK_SIZE)+1; i++) {
-        lseek(file,offset+ADDR_OFFSET+i*sizeof(int), 0);
-        read(file,&inode->addr[i], sizeof(int));
+    for (int i = 0; i < 10; ++i) {
+        if (i < (inode->size/BLOCK_SIZE)+1) {
+            lseek(file, offset + ADDR_OFFSET + i * sizeof(int), 0);
+            read(file, &inode->addr[i], sizeof(int));
+        }
     }
 
 /*
@@ -144,14 +146,15 @@ void printInode(const inode_type inode){
     printf("uid: %u\n", inode.uid);
     printf("gid: %u\n", inode.gid);
     printf("size: %u\n", inode.size);
-    for (int i = 0; i < (inode.size/BLOCK_SIZE)+1; i++) {
-        printf("addr[%i]: %u\n",i,inode.addr[i]);
+    for (int i = 0; i < 10; ++i) {
+        if (i < (inode.size/BLOCK_SIZE)+1)
+            printf("addr[%i]: %u\n",i,inode.addr[i]);
     }
 //    printf("actime[0]: %u\n", inode.actime[0]);
 //    printf("modtime[0]: %u\n", inode.modtime[0]);
 }
 void printDir(const dir_type* dir, int size){
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < 10, i < size; i++) {
         printf("inode [%i]: %u\n",i,dir[i].inode);
         printf("filename [%i]: %s\n",i,dir[i].filename);
     }
@@ -161,14 +164,12 @@ void printDir(const dir_type* dir, int size){
 // misc ///////////////////////////////////////////////////
 // find path element in directory
 int findElem(dir_type* dir, const char* elem, const int size){
-    printf("\nEntered findElem\n");
     for (int i = 0; i < size; i++) {
-        printf(dir[i].filename);
+        printf("\ndir[%i]: %s\n",i,dir[i].filename);
         if (strcmp(dir[i].filename,elem) == 0){
             return i;
         }
-        memset(dir[i].filename,NULL,sizeof(dir[i]));
-        printf("dir[%i]: %s\n",i,dir[i].filename);
+        memset(dir[i].filename,'\0', sizeof(dir[i].filename));
     }
     printf("Exited findElem\n");
     return -1;
