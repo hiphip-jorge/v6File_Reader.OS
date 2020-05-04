@@ -9,10 +9,12 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 // Constants ////////////////////////////
 #define BLOCK_SIZE 1024     // Block size
-#define INODE_SIZE 64
+#define DIR_NUM 64
+#define DIR_SIZE 16
 
 // Superblock offsets
 // isize starts at 0 offset
@@ -78,11 +80,11 @@ void printBits(size_t const size, void const * const ptr);
 // print functions
 void printSuperBlock(superblock_type superBlock);
 void printInode(inode_type inode);
-void printDir(dir_type dir);
+void printDir(dir_type* dir, int size);
 // read in functions
 void readInSuperBlock(int file, superblock_type* superBlock);
 void readInInode(int offset, int file, inode_type* inode);
-void readInDir(int offset, int file, dir_type* dir);
+void readInDir(int offset, int file, dir_type* dir, int size);
 ///////////////////////////////////
 
 #endif //OS4348_P2_FSFUNCTIONS_H

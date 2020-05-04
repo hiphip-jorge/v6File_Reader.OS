@@ -62,30 +62,36 @@ void readInSuperBlock(int file, superblock_type* superBlock){
     */
 }
 void readInInode(int offset, int file, inode_type* inode){
-// offset to desired i-node
-lseek(file,offset,0);
-read(file,&inode->flags,sizeof(inode->flags));
+    // offset to desired i-node
+    lseek(file,offset,0);
+    read(file,&inode->flags,sizeof(inode->flags));
 
-// offset to nlinks
-lseek(file,offset+NLINKS_OFFSET,0);
-read(file,&inode->nlinks,sizeof(inode->nlinks));
+    // offset to nlinks
+    lseek(file,offset+NLINKS_OFFSET,0);
+    read(file,&inode->nlinks,sizeof(inode->nlinks));
 
-// offset to uid
-lseek(file,offset+UID_OFFSET,0);
-read(file,&inode->uid,sizeof(inode->uid));
+    // offset to uid
+    lseek(file,offset+UID_OFFSET,0);
+    read(file,&inode->uid,sizeof(inode->uid));
 
-// offset to gid
-lseek(file,offset+GID_OFFSET,0);
-read(file,&inode->gid,sizeof(inode->gid));
+    // offset to gid
+    lseek(file,offset+GID_OFFSET,0);
+    read(file,&inode->gid,sizeof(inode->gid));
 
-// offset to size
-lseek(file,offset+SIZE_OFFSET,0);
-read(file,&inode->size,sizeof(inode->size));
+    // offset to size
+    lseek(file,offset+SIZE_OFFSET,0);
+    read(file,&inode->size,sizeof(inode->size));
 
-// offset to first addr
-lseek(file,offset+ADDR_OFFSET,0);
-read(file,&inode->addr,sizeof(int));
+    // offset to first addr
+    //lseek(file,offset+ADDR_OFFSET,0);
+    //read(file,&inode->addr,sizeof(int));
 
+    for (int i = 0; i < (inode->size/BLOCK_SIZE)+1; i++) {
+        lseek(file,offset+ADDR_OFFSET+i*sizeof(int), 0);
+        read(file,&inode->addr[i], sizeof(int));
+    }
+
+/*
 // offset to first actime
     lseek(file,offset+ACTIME_OFFSET,0);
     read(file,&inode->actime,sizeof(short));
@@ -93,14 +99,26 @@ read(file,&inode->addr,sizeof(int));
 //offset to first modtime
     lseek(file,offset+MODTIME_OFFSET,0);
     read(file,&inode->modtime,sizeof(short));
+*/
 }
-void readInDir(int offset, int file, dir_type* dir){
+void readInDir(int offset, int file, dir_type* dir, int size){
+    /*
     // offset to file inode
     lseek(file,offset,0);
     read(file,&dir->inode,sizeof(dir->inode));
     // offset to filename
     lseek(file,offset+2,0);
     read(file,&dir->filename,sizeof(dir->filename));
+    */
+    for (int i = 0; i < size;i++) {
+
+        // read i-node
+        lseek(file,offset+i*16,0);
+        read(file,&dir[i].inode,sizeof(dir[i].inode));
+        // read filename
+        lseek(file,offset+i*16+2,0);
+        read(file,&dir[i].filename,sizeof(dir[i].filename));
+    }
 }
 ////////////////////////////////////////////////////////////////
 
@@ -127,13 +145,17 @@ void printInode(inode_type inode){
     printf("uid: %u\n", inode.uid);
     printf("gid: %u\n", inode.gid);
     printf("size: %u\n", inode.size);
-    printf("addr[0]: %u\n", inode.addr[0]);
-    printf("actime[0]: %u\n", inode.actime[0]);
-    printf("modtime[0]: %u\n", inode.modtime[0]);
+    for (int i = 0; i < (inode.size/BLOCK_SIZE)+1; i++) {
+        printf("addr[%i]: %u\n",i,inode.addr[i]);
+    }
+//    printf("actime[0]: %u\n", inode.actime[0]);
+//    printf("modtime[0]: %u\n", inode.modtime[0]);
 }
-void printDir(dir_type dir){
-    printf("inode: %u\n",dir.inode);
-    printf("filename: %s\n",dir.filename);
+void printDir(dir_type* dir, int size){
+    for (int i = 0; i < size; i++) {
+        printf("inode [%i]: %u\n",i,dir[i].inode);
+        printf("filename [%i]: %s\n",i,dir[i].filename);
+    }
 }
 ///////////////////////////////////////////////////////////
 
