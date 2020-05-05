@@ -146,7 +146,7 @@ void printInode(const inode_type inode){
     printf("uid: %u\n", inode.uid);
     printf("gid: %u\n", inode.gid);
     printf("size: %u\n", inode.size);
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 1; ++i) {
         if (i < (inode.size/BLOCK_SIZE)+1)
             printf("addr[%i]: %u\n",i,inode.addr[i]);
     }
