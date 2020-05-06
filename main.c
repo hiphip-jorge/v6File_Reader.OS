@@ -2,7 +2,8 @@
 
 int main(int argc, char** argv){
     int fd1,fd2,ft,dirInode,leftover = 0;     // file directory, file type
-    unsigned int indirBlock[BLOCK_SIZE/4], indirBlock2[BLOCK_SIZE/4], indirBlock3[BLOCK_SIZE/4];  // 256 indirect blocks in inode addr
+    unsigned int indirBlock[BLOCK_SIZE/4], indirBlock2[BLOCK_SIZE/4],
+                    indirBlock3[BLOCK_SIZE/4];  // 256 indirect blocks in inode addr
     inode_type inode;
     dir_type dir[DIR_NUM];
     char blockBuf[BLOCK_SIZE];
@@ -83,8 +84,10 @@ int main(int argc, char** argv){
             pathElem = strtok(NULL, "/");
         }
     }
+    printInode(inode);
 
-    // if small, else large
+    //if (ft = )
+    // if small file, else large file
     if (inode.size < 4*11){
         printf("\nHmm..this is a small file. Easy peasy!\n\n");
         leftover = inode.size;
@@ -170,24 +173,20 @@ int main(int argc, char** argv){
         //leftover = inode.size - BLOCK_SIZE * 256 * 10;
         for (int i = 0; i < 256; i++) {
             // go through levels of indirection
-            lseek(fd1,BLOCK_SIZE*inode.addr[10],0);
-            printf("addr[10]: %u\n",inode.addr[10]);
-            // read in indirect blocks
+            lseek(fd1,BLOCK_SIZE*(inode.addr[10]), 0);
+            // read in the first indirect blocks
             read(fd1,indirBlock,sizeof(indirBlock));
-            // go to indirBlock[i]
-            lseek(fd1,BLOCK_SIZE*indirBlock[i],0);
-            printf("Going to block #%u from indir[%i]\n",indirBlock[i],i);
             for (int j = 0; j < 256; j++) {
+                // go to the ith inderBlock
+                lseek(fd1,BLOCK_SIZE*indirBlock[i],0);
                 // read in indirect blocks
                 read(fd1,indirBlock2,sizeof(indirBlock2));
                 // go to indirBlock[j]
-                lseek(fd1,BLOCK_SIZE*indirBlock2[j],0);
-                printf("\tGoing to block #%u from indir2[%i]\n",indirBlock2[j],j);
-                printf("\tGoing to block #%u from indir2[%i]\n",indirBlock2[j+1],j+1);
                 for (int k = 0; k < 256; k++) {
+                    lseek(fd1,BLOCK_SIZE*indirBlock2[j],0);
                     // read in indirect blocks
                     read(fd1,indirBlock3,sizeof(indirBlock3));
-                    if ((BLOCK_SIZE*256)-1 < leftover){
+                    if (BLOCK_SIZE-1 < (inode.size - leftover)){
                         // go to block indirBlock[k] for reading
                         lseek(fd1,BLOCK_SIZE*indirBlock3[k],0);
                         // read into buffer
@@ -196,33 +195,25 @@ int main(int argc, char** argv){
                         write(fd2,blockBuf,sizeof(blockBuf));
                         // reset buffer
                         memset(blockBuf,'\0',sizeof(blockBuf));
+                        // add another block of bytes read to leftover
+                        leftover = leftover + BLOCK_SIZE;
                     } else{
                         // go to block indirBlock[k] for reading
                         lseek(fd1,BLOCK_SIZE*indirBlock3[k],0);
-                        // check if remaining # of bytes are bigger than a block
-                        if (BLOCK_SIZE <= inode.size-leftover){
-                            // read a block into buffer
-                            read(fd1,blockBuf,sizeof(blockBuf));
-                            // write to output file
-                            write(fd2,blockBuf,sizeof(blockBuf));
-                            // reset buffer
-                            memset(blockBuf,'\0',sizeof(blockBuf));
-                        } else{
-                            // read remaining bytes into buffer
-                            read(fd1,blockBuf,(inode.size-leftover)%BLOCK_SIZE);
-                            // write to output file
-                            write(fd2,blockBuf,(inode.size-leftover)%BLOCK_SIZE);
-                            // reset buffer
-                            memset(blockBuf,'\0',sizeof(blockBuf));
-                        }
+                        // read remaining bytes into buffer
+                        read(fd1,blockBuf,(inode.size-leftover)%BLOCK_SIZE);
+                        // write to output file
+                        write(fd2,blockBuf,(inode.size-leftover)%BLOCK_SIZE);
+                        // reset buffer
+                        memset(blockBuf,'\0',sizeof(blockBuf));
+                        // add # of bytes read to leftover
+                        leftover = leftover + (inode.size-leftover)%BLOCK_SIZE;
                     }
-                    leftover = leftover + BLOCK_SIZE;
                     if (leftover >= inode.size)
                         break;
                 }
                 if (leftover >= inode.size)
                     break;
-                printf("3: Leftover: %u\n",leftover);
             }
             if (leftover >= inode.size)
                 break;
