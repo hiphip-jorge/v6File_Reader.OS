@@ -78,7 +78,6 @@ void readInInode(int offset, int file, inode_type* inode){
 }
 void readInDir(int offset, int file, dir_type* dir, int size){
     for (int i = 0; i < size;i++) {
-
         // read i-node
         lseek(file,offset+i*16,0);
         read(file,&dir[i].inode,sizeof(dir[i].inode));
@@ -111,7 +110,7 @@ void printInode(const inode_type inode){
     printf("uid: %u\n", inode.uid);
     printf("gid: %u\n", inode.gid);
     printf("size: %u\n", inode.size);
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 11; ++i) {
         if (i < (inode.size/BLOCK_SIZE)+1)
             printf("addr[%i]: %u\n",i,inode.addr[i]);
     }
