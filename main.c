@@ -1,8 +1,7 @@
 #include "fsFunctions.h"
 
 int main(int argc, char** argv){
-    int fd1,fd2,ft,leftover = 0;     // file directory, file type
-    unsigned int dirInode;
+    int fd1,fd2,ft,dirInode,leftover = 0;     // file directory, file type
     unsigned int indirBlock[BLOCK_SIZE/4];  // 256 indirect blocks in inode addr
     inode_type inode;
     dir_type dir[DIR_NUM];
