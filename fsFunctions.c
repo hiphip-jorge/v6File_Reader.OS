@@ -69,7 +69,7 @@ void readInInode(int offset, int file, inode_type* inode){
     read(file,&inode->size,sizeof(inode->size));
 
     // offset to addr and read necessary blocks
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 11; ++i) {
         if (i < (inode->size/BLOCK_SIZE)+1) {
             lseek(file, offset + ADDR_OFFSET + i * sizeof(int), 0);
             read(file, &inode->addr[i], sizeof(int));
