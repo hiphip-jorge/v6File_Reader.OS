@@ -46,20 +46,6 @@ void readInSuperBlock(int file, superblock_type* superBlock){
     // offset to time
     lseek(file,BLOCK_SIZE+TIME_OFFSET,0);
     read(file,superBlock->time, sizeof(short));
-
-    /*
-    // free offset already to inode
-    for (int j = 0; j < 201; i++) { // inode array size is 201
-        read(file,&superBlock->inode[j], sizeof(short));
-        lseek(file,offset+INODE_OFFSET+sizeof(short)*j+1,0);
-    }
-
-    // offset to time
-    for (int k = 0; k < 2; k++) { // time array size is 2
-        lseek(file, offset + TIME_OFFSET + sizeof(short) * k, 0);
-        read(file, superBlock->time[k], sizeof(short));
-    }
-    */
 }
 void readInInode(int offset, int file, inode_type* inode){
     // offset to desired i-node
@@ -82,36 +68,15 @@ void readInInode(int offset, int file, inode_type* inode){
     lseek(file,offset+SIZE_OFFSET,0);
     read(file,&inode->size,sizeof(inode->size));
 
-    // offset to first addr
-    //lseek(file,offset+ADDR_OFFSET,0);
-    //read(file,&inode->addr,sizeof(int));
-
+    // offset to addr and read necessary blocks
     for (int i = 0; i < 10; ++i) {
         if (i < (inode->size/BLOCK_SIZE)+1) {
             lseek(file, offset + ADDR_OFFSET + i * sizeof(int), 0);
             read(file, &inode->addr[i], sizeof(int));
         }
     }
-
-/*
-// offset to first actime
-    lseek(file,offset+ACTIME_OFFSET,0);
-    read(file,&inode->actime,sizeof(short));
-
-//offset to first modtime
-    lseek(file,offset+MODTIME_OFFSET,0);
-    read(file,&inode->modtime,sizeof(short));
-*/
 }
 void readInDir(int offset, int file, dir_type* dir, int size){
-    /*
-    // offset to file inode
-    lseek(file,offset,0);
-    read(file,&dir->inode,sizeof(dir->inode));
-    // offset to filename
-    lseek(file,offset+2,0);
-    read(file,&dir->filename,sizeof(dir->filename));
-    */
     for (int i = 0; i < size;i++) {
 
         // read i-node
@@ -150,8 +115,6 @@ void printInode(const inode_type inode){
         if (i < (inode.size/BLOCK_SIZE)+1)
             printf("addr[%i]: %u\n",i,inode.addr[i]);
     }
-//    printf("actime[0]: %u\n", inode.actime[0]);
-//    printf("modtime[0]: %u\n", inode.modtime[0]);
 }
 void printDir(const dir_type* dir, int size){
     for (int i = 0; i < 10, i < size; i++) {
@@ -165,13 +128,11 @@ void printDir(const dir_type* dir, int size){
 // find path element in directory
 int findElem(dir_type* dir, const char* elem, const int size){
     for (int i = 0; i < size; i++) {
-        printf("\ndir[%i]: %s\n",i,dir[i].filename);
         if (strcmp(dir[i].filename,elem) == 0){
             return i;
         }
         memset(dir[i].filename,'\0', sizeof(dir[i].filename));
     }
-    printf("Exited findElem\n");
     return -1;
 }
 
@@ -186,7 +147,6 @@ int fileType(const inode_type* inode){
         type = 2;
     if (inode->flags/60000 == 1)
         type = 3;
-    printf("File type: %i\n",type);
     return type;
 
 }

@@ -8,25 +8,26 @@ int main(int argc, char** argv){
     dir_type dir[DIR_NUM];
     char blockBuf[BLOCK_SIZE];
     char input[BLOCK_SIZE];
-    char fs[] ="v6fs";
-    char testPath[] = "/dir3/subdir1/subdir2/subdir3/file4.txt";
     char *pathElem;
 
     // prompt for file system and open input
     printf("Enter the file system name: ");
-//    gets(input);
+    gets(input);
 
     // open disk
-    if((fd1 = open(fs,2)) == -1){
+    if((fd1 = open(input,2)) == -1){
         fprintf(stderr, "Cannot open v6fs drive. Try again later.\n");
         exit(1);
     }
 
+    // prep input for file path
+    memset(input,'\0',sizeof(input));
+
     // prompt for file and open input
-    printf("Enter the file you would like to copy and output as "
+    printf("Enter the file you would like to copy and output to "
            "myoutputfile.txt:\n");
-//    gets(input);
-    printf("%s\n",testPath);
+    gets(input);
+    printf("%s\n",input);
 
     // create output file
     fd2 = creat("myoutputfile.txt",0777);
@@ -37,7 +38,7 @@ int main(int argc, char** argv){
     }
 
     // collect the first path element
-    pathElem = strtok(testPath, "/");
+    pathElem = strtok(input, "/");
     printf("%s\n",pathElem);
 
     // look at root directory content in block 9 (addr[0] of inode 1)
@@ -47,7 +48,7 @@ int main(int argc, char** argv){
 
     // look for path element in directory
     if ((dirInode = findElem(dir,pathElem,inode.size/DIR_SIZE))<0)
-        fprintf(stderr, "Cannot open %s. Try again later.\n",testPath);
+        fprintf(stderr, "%s does not exist in this directory. Try again later.\n",pathElem);
 
     puts("\n");
     // move to element inode
@@ -70,7 +71,7 @@ int main(int argc, char** argv){
 
             // look for directory in block
             if ((dirInode = findElem(dir, pathElem, inode.size/DIR_SIZE)) < 0)
-                fprintf(stderr, "Cannot open %s. Try again later.\n", testPath);
+                fprintf(stderr, "Cannot open %s. Try again later.\n", pathElem);
 
             puts("\n\n");
             // go to file inode
@@ -84,18 +85,15 @@ int main(int argc, char** argv){
             pathElem = strtok(NULL, "/");
             printf("pathElem: %s\n\n",pathElem);
         }
-    }else{
-        printf("\nFile is not a directory\n");
     }
 
     // check file size: small or large
-    // small implementation
-    if (inode.size < 4*BLOCK_SIZE){
-        printf("\nSmall File!\n\n");
+    // small file implementation
+    if (inode.size < 4*11){
+        printf("\nHmm..this is a small file. Easy peasy!\n\n");
         leftover = inode.size;
         for (int i = 0; i < 11; i++){
             // go to blocks in inode addr
-            printf("\n\nThis is a block #%u!\n\n", inode.addr[i]);
             lseek(fd1, BLOCK_SIZE * inode.addr[i], 0);
             if (leftover / BLOCK_SIZE == 0) {
                 read(fd1,blockBuf,leftover);
@@ -107,37 +105,37 @@ int main(int argc, char** argv){
 
             // reset blockBuf
             memset(blockBuf,'\0',sizeof(blockBuf));
-            if(0 <= leftover - BLOCK_SIZE)
+            if(0 < leftover - BLOCK_SIZE)
                 leftover = leftover - BLOCK_SIZE;
             else
                 break;
         }
-    } else{ // large implementation
-        leftover = inode.size / BLOCK_SIZE;
+    } else{ // large file implementation up to 10th addr. Last one is separate
+        printf("\nUh-Oh..we got a large file!\n\n");
+        leftover = inode.size;
         for (int i = 0; i < ((inode.size/BLOCK_SIZE)/256)+1; i++) {
             printf("\n//////Iter I: %i\n////////addr[%i]: %u////////////////////////////////////////////\n", i,i,inode.addr[i]);
-            if (i < leftover) {
-                // go to blocks in inode addr
-                lseek(fd1, BLOCK_SIZE*(inode.addr[i]), 0);
-                read(fd1,indirBlock, sizeof(indirBlock));
-                // go to each block and pull content
-                for (int j = 0; j < 256; j++) {
-                    printf("\n////////Iter %i:\tThis is indirect block #%u////////\n", j, indirBlock[j]);
-                    lseek(fd1,BLOCK_SIZE*(indirBlock[j]-1), 0);
-                    if (leftover / (BLOCK_SIZE/4) == 0) {
-                        read(fd1, blockBuf, leftover);
-                        leftover--;
-                    }
-                    else
-                        read(fd1, blockBuf, BLOCK_SIZE);
-                    //printf("%s", blockBuf);
-                    write(fd2,blockBuf,sizeof(blockBuf));
-                    if (leftover == 0)
-                        break;
+            // go to blocks in inode addr
+            lseek(fd1, BLOCK_SIZE*(inode.addr[i]), 0);
+            read(fd1,indirBlock, sizeof(indirBlock));
+            // go to each block and pull content
+            for (int j = 0; j < 256; j++) {
+                printf("\n////////Iter %i:\tThis is indirect block #%u////////\n", j, indirBlock[j]);
+                lseek(fd1,BLOCK_SIZE*(indirBlock[j]), 0);
+                if (leftover / (BLOCK_SIZE/4) == 0) {
+                    read(fd1, blockBuf, leftover);
+                    leftover--;
                 }
+                else
+                    read(fd1, blockBuf, BLOCK_SIZE);
+                //printf("%s", blockBuf);
+                write(fd2,blockBuf,sizeof(blockBuf));
+                if (leftover == 0)
+                    break;
             }
-            if(0 <= leftover - 256)
-                leftover = leftover - 256;
+
+            if(0 < leftover - 256*BLOCK_SIZE)
+                leftover = leftover - 256*BLOCK_SIZE;
             printf("Leftover:%i\n",leftover);
         }
     }

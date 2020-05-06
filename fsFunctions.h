@@ -1,6 +1,3 @@
-//
-// Created by Jorge Perez on 4/29/20.
-//
 
 #ifndef OS4348_P2_FSFUNCTIONS_H
 #define OS4348_P2_FSFUNCTIONS_H
