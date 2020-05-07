@@ -54,7 +54,7 @@ Some useful system calls:
 - read()
 - write()
 
-## Compiling and Executing Instructions
+## Compiling and Execution Instructions
 
 Files in directory: </br>
 - main.c
@@ -69,10 +69,12 @@ executing: "./a.out"
 or 
 
 compiling: "g++ main.c fsFunctions.h fsFunctions.c -o v6file-reader" </br>
-executing: "./v6file-reader"
- 
- 
- 
+executing: "./v6file-reader" </br>
+
+When prompted by "Enter the file system name:", enter "v6fs" and press enter. </br>
+This will open the v6fs file and then the program will prompt for the file to </br>
+to locate and output the contents to "myoutputfile.txt". Enter the file path of </br>
+the file then press enter. 
  
  
  
