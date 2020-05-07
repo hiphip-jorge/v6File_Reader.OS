@@ -18,35 +18,35 @@ Your program can then terminate.
 
 ## Given
 
-The format of Superblock (which is 1024 Bytes) is as follows:</br>
-//	superblock	Structure</br>
-typedef	struct	</br>
-unsigned	short	isize;	//	2	bytes	- Blocks	for	i-list</br>
-unsigned	short	fsize;	//	2	bytes	- Number	of	blocks</br>
-unsigned	short	nfree;	//	2	bytes	- Pointer	of	free	block	array</br>
-unsigned	short	ninode;	//	2	bytes	- Pointer	of	free	inodes	array</br>
-unsigned	int	free[152];	//	Array	to	track	free	blocks</br>
-unsigned	short	inode[200];	//	Array	to	store	free	inodes</br>
-char	flock;</br>
-char	ilock;</br>
-unsigned	short	fmod;</br>
-unsigned	short	time[2];	//	To	store	epoch</br>
-}	superblock_type;</br>
+// Superblock Structure </br>
+#pragma pack(1) </br>
+typedef struct { </br>
+    unsigned short isize; // 2 bytes - Blocks for i-list </br>
+    unsigned int fsize; // 4 bytes - Number of blocks </br>
+    unsigned short nfree; // 2 bytes - Pointer of free block array </br>
+    unsigned short ninode; // 2 bytes - Pointer of free inodes array </br>
+    unsigned int free[151]; // Array to track free blocks </br>
+    unsigned short inode[201]; // Array to store free inodes </br>
+    char flock; </br>
+    char ilock; </br>
+    unsigned short fmod; </br>
+    unsigned short time[2]; // To store epoch </br>
+} superblock_type; </br>
+superblock_type superBlock; </br>
 
-The format of i-node (which is 64 Bytes) is as follows:</br>
-//	i-node	Structure</br>
-typedef	struct	{</br>
-unsigned	short	flags;	//	Flag	of	a	file</br>
-unsigned	short	nlinks;	//	Number	of	links	to	a	file</br>
-unsigned	short	uid;	//	User	ID	of	owner</br>
-unsigned	short	gid;	//	Group	ID	of	owner</br>
-unsigned	int	size;	//	4	bytes	- Size	of	the	file</br>
-unsigned	int	addr[11];	//	Block	numbers	of	the	file	location.	addr[10]	is	used	for	double	indirect
-block </br>
-unsigned	short	actime[2];	//	Last	Access	time </br>
-unsigned	short	modtime[2];	//	Last	modified	time </br>
-}	inode_type; </br>
-
+// I-Node Structure </br>
+#pragma pack(1) </br>
+typedef struct { </br>
+    unsigned short flags; // Flag of a file </br>
+    unsigned short nlinks; // Number of links to a file </br>
+    unsigned short uid; // User ID of owner </br>
+    unsigned short gid; // Group ID of owner </br>
+    unsigned int size; // 4 bytes - Size of the file </br>
+    unsigned int addr[11]; // Block numbers of the file location. addr[10] is used for double indirect block </br>
+    unsigned short actime[2]; // Last Access time </br>
+    unsigned short modtime[2]; // Last modified time </br>
+} inode_type; </br>
+inode_type inode; </br>
 
 Some useful system calls:
 - open()
