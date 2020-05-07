@@ -37,7 +37,7 @@ int main(int argc, char** argv){
 
     // look for path element in directory
     if ((dirInode = findElem(dir,pathElem,inode.size/DIR_SIZE))<0) {
-        fprintf(stderr, "%s does not exist in this directory. Try again later.\n", pathElem);
+        fprintf(stderr, "'%s' does not exist in this directory. Try again later.\n", pathElem);
         exit(1);
     }
 
@@ -57,8 +57,8 @@ int main(int argc, char** argv){
 
             // look for directory in block
             if ((dirInode = findElem(dir, pathElem, inode.size/DIR_SIZE)) < 0) {
-                printf("Cannot open %s. Try again later.\n", pathElem);
-                exit(1);
+                printf("Cannot open '%s'. Try again later.\n", pathElem);
+                exit(0);
             }
 
             // go to file inode
@@ -71,6 +71,11 @@ int main(int argc, char** argv){
             // get next element
             pathElem = strtok(NULL, "/");
         }
+    }
+
+    if (inode.size == 0){
+        printf("This file is empty. Nothing is output.\n");
+        exit(0);
     }
 
     // if a plain file
