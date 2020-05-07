@@ -34,7 +34,6 @@ int main(int argc, char** argv){
     // look at root directory content in block 9 (addr[0] of inode 1)
     readInInode(2*BLOCK_SIZE,fd1,&inode);
     readInDir(BLOCK_SIZE*9,fd1,dir,inode.size/DIR_SIZE);
-    printDir(dir,inode.size/DIR_SIZE);
 
     // look for path element in directory
     if ((dirInode = findElem(dir,pathElem,inode.size/DIR_SIZE))<0) {
@@ -55,8 +54,6 @@ int main(int argc, char** argv){
         while (pathElem != NULL) {
             // go to block
             readInDir(BLOCK_SIZE*inode.addr[0], fd1, dir, inode.size/DIR_SIZE);
-            printDir(dir,inode.size/DIR_SIZE);
-            printf("\n");
 
             // look for directory in block
             if ((dirInode = findElem(dir, pathElem, inode.size/DIR_SIZE)) < 0) {
