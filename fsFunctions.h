@@ -72,6 +72,7 @@ typedef struct {
 ////////////////////////////////////
 
 // Prototypes /////////////////////
+long decimalToBinary(unsigned short n);
 // find path element in directory
 int findElem(dir_type* dir, const char* elem, const int size);
 // determine type of file

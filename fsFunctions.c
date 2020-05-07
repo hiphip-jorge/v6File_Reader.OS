@@ -105,7 +105,7 @@ void printSuperBlock(const superblock_type superBlock){
 }
 void printInode(const inode_type inode){
     printf("I-Node:\n");
-    printf("flag: %u\n",inode.flags);
+    printf("flag: %lu\n",decimalToBinary(inode.flags));
     printf("nlinks: %u\n", inode.nlinks);
     printf("uid: %u\n", inode.uid);
     printf("gid: %u\n", inode.gid);
@@ -139,15 +139,30 @@ int findElem(dir_type* dir, const char* elem, const int size){
 // 0 - plain file, 1 - directory
 // 2 - char-type, 3 - block-type
 int fileType(const inode_type* inode){
+    unsigned long binFlag = decimalToBinary(inode->flags);
     int type = 0;
-    if (inode->flags/40000 == 1)
+    if ((binFlag/10000000000000) % 100 == 10)
         type = 1;
-    if (inode->flags/20000 == 1)
+    if ((binFlag/10000000000000) % 100 == 01)
         type = 2;
-    if (inode->flags/60000 == 1)
+    if ((binFlag/10000000000000) % 100 == 11)
         type = 3;
     return type;
 
 }
 
+// decimal to binary for flags
+long decimalToBinary(unsigned short n){
+    long bin = 0, temp = 1;
+    unsigned short rem = 0;
+
+    while (n!=0){
+        rem = n%2;
+        n = n / 2;
+        bin = bin + rem*temp;
+        temp = temp * 10;
+    }
+
+    return bin;
+}
 ///////////////////////////////////////////////////////////
