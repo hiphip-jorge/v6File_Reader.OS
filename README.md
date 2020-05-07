@@ -68,7 +68,7 @@ executing: "./a.out"
 
 or 
 
-compiling: g++ main.c fsFunctions.h fsFunctions.c -o v6file-reader </br>
+compiling: "g++ main.c fsFunctions.h fsFunctions.c -o v6file-reader" </br>
 executing: "./v6file-reader"
  
  
