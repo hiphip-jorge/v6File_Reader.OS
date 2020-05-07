@@ -53,3 +53,27 @@ Some useful system calls:
 - lseek()
 - read()
 - write()
+
+## Compiling and Executing Instructions
+
+Files in directory: </br>
+- main.c
+- fsFunctions.h
+- fsFunctions.c
+- v6fs
+
+commands: </br>
+compiling: "g++ main.c fsFunctions.h fsFunctions.c" </br>
+executing: "./a.out"
+
+or 
+
+compiling: g++ main.c fsFunctions.h fsFunctions.c -o v6file-reader </br>
+executing: "./v6file-reader"
+ 
+ 
+ 
+ 
+ 
+ 
+ 
