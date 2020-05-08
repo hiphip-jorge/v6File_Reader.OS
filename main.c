@@ -1,3 +1,10 @@
+//////////////////////////////////////////////////
+// Name: Jorge Perez
+// Due Date: May 7, 2020
+// Course: cs4348 - Operating Systems
+// file: main.c
+//////////////////////////////////////////////////
+
 #include "fsFunctions.h"
 
 int main(int argc, char** argv){
@@ -81,7 +88,7 @@ int main(int argc, char** argv){
     // if a plain file
     if ((ft=fileType(&inode)) == 0) {
         // create output file
-        fd2 = creat("myoutputfile.txt",0777);
+        fd2 = creat("myoutputfile.txt",0666);
         // open output file
         if((open("myoutputfile.txt",2)) == -1){
             fprintf(stderr, "Cannot open output file. Try again later.\n");

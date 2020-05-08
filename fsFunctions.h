@@ -1,3 +1,9 @@
+//////////////////////////////////////////////////
+//// Name: Jorge Perez
+//// Due Date: May 7, 2020
+//// Course: cs4348 - Operating Systems
+//// file: fsFunctions.h
+////////////////////////////////////////////////////
 
 #ifndef OS4348_P2_FSFUNCTIONS_H
 #define OS4348_P2_FSFUNCTIONS_H
