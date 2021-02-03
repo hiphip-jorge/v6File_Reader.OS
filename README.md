@@ -6,7 +6,7 @@ Operating Systems Concepts Spring 2020
 With this modification, you have access to a file that has been formatted as the modified v6file
 system (with these modifications).
 
-As part of this programming project, you will read the name of the v6 file name form the user as
+As part of this programming project, you will read the name of the v6 file name from the user as
 the first input data. This will be a string ending with the user typing the enter key on the keyboard.
 - You will open this file (which has the modified v6file system).
 - You will then read the name of v6 file name from the user on the keyboard (again this is a string
